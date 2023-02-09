@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 
 namespace MillenniumEye.service
 {
-    public class CardService
+    public class CardService : ICardService
     {
         public async Task<Card> GetCardData(string cardName)
         {
