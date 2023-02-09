@@ -5,7 +5,7 @@ namespace MillenniumEye.service
 {
     public interface ICardService
     {
-        Task<Card> GetCardData(string cardName);
+        Task<Data> GetCardData(string cardName);
         Task SendAccountAgeMessageAsync(SocketMessage message);
         Task SendCardInformationMessageAsync(SocketMessage message, string command);
         Task SendCardPriceMessageAsync(SocketMessage message, string command);
