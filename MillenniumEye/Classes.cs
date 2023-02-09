@@ -52,7 +52,7 @@ public class CardImage
         public string? SetPrice { get; set; }
     }
 
-    public class Datum
+    public class Card
     {
         [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
         public int? Id { get; set; }
@@ -97,9 +97,9 @@ public class CardImage
         public List<CardPrice>? CardPrices { get; set; }
     }
 
-    public class Card
+    public class Data
     {
         [JsonProperty("data", NullValueHandling = NullValueHandling.Ignore)]
-        public List<Datum>? Data { get; set; }
+        public List<Card>? CardData { get; set; }
     }
 

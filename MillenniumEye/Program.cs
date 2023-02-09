@@ -35,7 +35,7 @@ public class Program
         await Task.Delay(-1);
     }
 
-    public async Task<Card> GetCardData(string cardName)
+    public async Task<Data> GetCardData(string cardName)
     {
         var client = new HttpClient();
         client.DefaultRequestHeaders.Accept.Clear();
@@ -46,7 +46,7 @@ public class Program
         if (response.IsSuccessStatusCode)
         {
             var json = await response.Content.ReadAsStringAsync();
-            Card card = JsonConvert.DeserializeObject<Card>(json);
+            var card = JsonConvert.DeserializeObject<Data>(json);
             return card;
         }
         else
@@ -86,8 +86,8 @@ public class Program
             string cardName = command.Replace("price ", "");
             if (cardName.Length > 0)
             {
-                Card card = await GetCardData(cardName);
-                await message.Channel.SendMessageAsync($@"{message.Author.Mention} the price for " + cardName + " is : " + card.Data[0].CardPrices[0].CardmarketPrice);
+                var card = await GetCardData(cardName);
+                await message.Channel.SendMessageAsync($@"{message.Author.Mention} the price for " + cardName + " is : " + card.CardData[0].CardPrices[0].CardmarketPrice);
             }
             else
             {
@@ -99,22 +99,18 @@ public class Program
             string cardName = command.Replace("info ", "");
             if (cardName.Length > 0)
             {
-                //ce je karta monster ne pokazi atk and def and level
-                Card card = await GetCardData(cardName);
-                if (card.Data[0].Type == "Spell Card" || card.Data[0].Type == "Trap Card")
+                var card = await GetCardData(cardName);
+                if (card.CardData[0].Type == "Spell Card" || card.CardData[0].Type == "Trap Card")
                 {
-                    //await message.Channel.SendFileAsync($@"->" + card.Data[0].CardImages[0].ImageUrl);
-                    await message.Channel.SendMessageAsync($@"{message.Author.Mention} the information for " + cardName + " is: " + $"{Environment.NewLine} ID: " + card.Data[0].Id + $"{Environment.NewLine} Name: " + card.Data[0].Name + $"{Environment.NewLine} Archetype: " + card.Data[0].Archetype + $"{Environment.NewLine} Type: " + card.Data[0].Type + $"{Environment.NewLine} Description: " + card.Data[0].Desc);
+                    await message.Channel.SendMessageAsync($@"{message.Author.Mention} the information for " + cardName + " is: " + $"{Environment.NewLine} ID: " + card.CardData[0].Id + $"{Environment.NewLine} Name: " + card.CardData[0].Name + $"{Environment.NewLine} Archetype: " + card.CardData[0].Archetype + $"{Environment.NewLine} Type: " + card.CardData[0].Type + $"{Environment.NewLine} Description: " + card.CardData[0].Desc);
                 }
-                else if (card.Data[0].Type == "Link Monster")
+                else if (card.CardData[0].Type == "Link Monster")
                 {
-                    //await message.Channel.SendFileAsync($@"" + card.Data[0].CardImages[0].ImageUrl);
-                    await message.Channel.SendMessageAsync($@"{message.Author.Mention} the information for " + cardName + " is: " + $"{Environment.NewLine} ID: " + card.Data[0].Id + $"{Environment.NewLine} Name: " + card.Data[0].Name + $"{Environment.NewLine} Archetype: " + card.Data[0].Archetype + $"{Environment.NewLine} Type: " + card.Data[0].Type + $"{Environment.NewLine} ATK: " + card.Data[0].Atk + $"{Environment.NewLine} Description: " + card.Data[0].Desc);
+                    await message.Channel.SendMessageAsync($@"{message.Author.Mention} the information for " + cardName + " is: " + $"{Environment.NewLine} ID: " + card.CardData[0].Id + $"{Environment.NewLine} Name: " + card.CardData[0].Name + $"{Environment.NewLine} Archetype: " + card.CardData[0].Archetype + $"{Environment.NewLine} Type: " + card.CardData[0].Type + $"{Environment.NewLine} ATK: " + card.CardData[0].Atk + $"{Environment.NewLine} Description: " + card.CardData[0].Desc);
                 }
                 else
                 {
-                    //await  message.Channel.SendFileAsync($@"" + card.Data[0].CardImages[0].ImageUrl);
-                    await message.Channel.SendMessageAsync($@"{message.Author.Mention} the information for " + cardName + $" is: {Environment.NewLine}" + " ID: " + card.Data[0].Id + $"{Environment.NewLine} Name: " + card.Data[0].Name + $"{Environment.NewLine} Archetype: " + card.Data[0].Archetype + $"{Environment.NewLine} Type: " + card.Data[0].Type + $"{Environment.NewLine} Level: " + card.Data[0].Level + $"{Environment.NewLine} ATK: " + card.Data[0].Atk + $"{Environment.NewLine} DEF: " + card.Data[0].Def + $"{Environment.NewLine} Description: " + card.Data[0].Desc);
+                    await message.Channel.SendMessageAsync($@"{message.Author.Mention} the information for " + cardName + $" is: {Environment.NewLine}" + " ID: " + card.CardData[0].Id + $"{Environment.NewLine} Name: " + card.CardData[0].Name + $"{Environment.NewLine} Archetype: " + card.CardData[0].Archetype + $"{Environment.NewLine} Type: " + card.CardData[0].Type + $"{Environment.NewLine} Level: " + card.CardData[0].Level + $"{Environment.NewLine} ATK: " + card.CardData[0].Atk + $"{Environment.NewLine} DEF: " + card.CardData[0].Def + $"{Environment.NewLine} Description: " + card.CardData[0].Desc);
                 }
             }
             else
