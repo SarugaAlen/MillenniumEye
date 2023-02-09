@@ -7,8 +7,8 @@ namespace MillenniumEye.service
     {
         Task<Data> GetCardData(string cardName);
         Task SendAccountAgeMessageAsync(SocketMessage message);
-        Task SendCardInformationMessageAsync(SocketMessage message, string command);
-        Task SendCardPriceMessageAsync(SocketMessage message, string command);
+        Task SendCardInformationMessageAsync(SocketMessage message);
+        Task SendCardPriceMessageAsync(SocketMessage message);
         Task SendHelloMessageAsync(SocketMessage message);
         Task SendHelpMessageAsync(SocketMessage message);
     }
