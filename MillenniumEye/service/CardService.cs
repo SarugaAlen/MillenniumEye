@@ -46,7 +46,7 @@ namespace MillenniumEye.service
                 return;
             }
 
-            await message.Channel.SendMessageAsync($"{message.Author.Mention}, the price for {cardName} is: {card.CardData[0].CardPrices[0].CardmarketPrice}");
+            await message.Channel.SendMessageAsync($"{message.Author.Mention}, the price for {cardName} is: {card.CardData[0].CardPrices[0].CardmarketPrice}€");
         }
 
         public async Task SendCardInformationMessageAsync(SocketMessage message)
