@@ -30,9 +30,9 @@ namespace MillenniumEye.service
             await message.Channel.SendMessageAsync($"Your account was created at {message.Author.Mention} on {message.Author.CreatedAt.DateTime.ToShortDateString()}");
         }
 
-        public async Task SendCardPriceMessageAsync(SocketMessage message, string command)
+        public async Task SendCardPriceMessageAsync(SocketMessage message)
         {
-            string cardName = command.Substring("price".Length).Trim();
+            string cardName = message.Content["!price".Length..].Trim();
             if (string.IsNullOrEmpty(cardName))
             {
                 await message.Channel.SendMessageAsync("Invalid card name. Please provide a valid card name.");
@@ -49,9 +49,9 @@ namespace MillenniumEye.service
             await message.Channel.SendMessageAsync($"{message.Author.Mention}, the price for {cardName} is: {card.CardData[0].CardPrices[0].CardmarketPrice}");
         }
 
-        public async Task SendCardInformationMessageAsync(SocketMessage message, string command)
+        public async Task SendCardInformationMessageAsync(SocketMessage message)
         {
-            string cardName = command.Substring("info".Length).Trim();
+            string cardName = message.Content["!info".Length..].Trim();
             if (string.IsNullOrEmpty(cardName))
             {
                 await message.Channel.SendMessageAsync("Invalid card name. Please provide a valid card name.");
