@@ -50,9 +50,9 @@ public class Program
             return;
         }
 
-        string command = message.Content.TrimStart('!');
+        string[] command = message.Content.Replace("!", "").Split(" ");
 
-        switch (command)
+        switch (command[0])
         {
             case "hello":
                 await cardService.SendHelloMessageAsync(message);
@@ -61,10 +61,10 @@ public class Program
                 await cardService.SendAccountAgeMessageAsync(message);
                 break;
             case "price":
-                await cardService.SendCardPriceMessageAsync(message, command);
+                await cardService.SendCardPriceMessageAsync(message);
                 break;
             case "info":
-                await cardService.SendCardInformationMessageAsync(message, command);
+                await cardService.SendCardInformationMessageAsync(message);
                 break;
             case "help":
                 await cardService.SendHelpMessageAsync(message);

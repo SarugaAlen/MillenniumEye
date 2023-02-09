@@ -5,9 +5,9 @@ using System.Net.Http.Headers;
 
 namespace MillenniumEye.service
 {
-    public class CardService
+    public class CardService : ICardService
     {
-        public async Task<Card> GetCardData(string cardName)
+        public async Task<Data> GetCardData(string cardName)
         {
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -16,7 +16,7 @@ namespace MillenniumEye.service
 
             response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
-            var card = JsonConvert.DeserializeObject<Card>(json);
+            var card = JsonConvert.DeserializeObject<Data>(json);
             return card;
         }
 
@@ -30,9 +30,9 @@ namespace MillenniumEye.service
             await message.Channel.SendMessageAsync($"Your account was created at {message.Author.Mention} on {message.Author.CreatedAt.DateTime.ToShortDateString()}");
         }
 
-        public async Task SendCardPriceMessageAsync(SocketMessage message, string command)
+        public async Task SendCardPriceMessageAsync(SocketMessage message)
         {
-            string cardName = command.Substring("price".Length).Trim();
+            string cardName = message.Content["!price".Length..].Trim();
             if (string.IsNullOrEmpty(cardName))
             {
                 await message.Channel.SendMessageAsync("Invalid card name. Please provide a valid card name.");
@@ -40,18 +40,18 @@ namespace MillenniumEye.service
             }
 
             var card = await GetCardData(cardName);
-            if (card == null || card.Data == null || !card.Data.Any())
+            if (card == null || card.CardData == null || !card.CardData.Any())
             {
                 await message.Channel.SendMessageAsync($"No information found for the card '{cardName}'.");
                 return;
             }
 
-            await message.Channel.SendMessageAsync($"{message.Author.Mention}, the price for {cardName} is: {card.Data[0].CardPrices[0].CardmarketPrice}");
+            await message.Channel.SendMessageAsync($"{message.Author.Mention}, the price for {cardName} is: {card.CardData[0].CardPrices[0].CardmarketPrice}€");
         }
 
-        public async Task SendCardInformationMessageAsync(SocketMessage message, string command)
+        public async Task SendCardInformationMessageAsync(SocketMessage message)
         {
-            string cardName = command.Substring("info".Length).Trim();
+            string cardName = message.Content["!info".Length..].Trim();
             if (string.IsNullOrEmpty(cardName))
             {
                 await message.Channel.SendMessageAsync("Invalid card name. Please provide a valid card name.");
@@ -59,23 +59,23 @@ namespace MillenniumEye.service
             }
 
             var card = await GetCardData(cardName);
-            if (card == null || card.Data == null || !card.Data.Any())
+            if (card == null || card.CardData == null || !card.CardData.Any())
             {
                 await message.Channel.SendMessageAsync($"No information found for the card '{cardName}'.");
                 return;
             }
 
-            if (card.Data[0].Type == "Spell Card" || card.Data[0].Type == "Trap Card")
+            if (card.CardData[0].Type == "Spell Card" || card.CardData[0].Type == "Trap Card")
             {
-                await message.Channel.SendMessageAsync($@"{message.Author.Mention} the information for " + cardName + " is: " + $"{Environment.NewLine} ID: " + card.Data[0].Id + $"{Environment.NewLine} Name: " + card.Data[0].Name + $"{Environment.NewLine} Archetype: " + card.Data[0].Archetype + $"{Environment.NewLine} Type: " + card.Data[0].Type + $"{Environment.NewLine} Description: " + card.Data[0].Desc);
+                await message.Channel.SendMessageAsync($@"{message.Author.Mention} the information for " + cardName + " is: " + $"{Environment.NewLine} ID: " + card.CardData[0].Id + $"{Environment.NewLine} Name: " + card.CardData[0].Name + $"{Environment.NewLine} Archetype: " + card.CardData[0].Archetype + $"{Environment.NewLine} Type: " + card.CardData[0].Type + $"{Environment.NewLine} Description: " + card.CardData[0].Desc);
             }
-            else if (card.Data[0].Type == "Link Monster")
+            else if (card.CardData[0].Type == "Link Monster")
             {
-                await message.Channel.SendMessageAsync($@"{message.Author.Mention} the information for " + cardName + " is: " + $"{Environment.NewLine} ID: " + card.Data[0].Id + $"{Environment.NewLine} Name: " + card.Data[0].Name + $"{Environment.NewLine} Archetype: " + card.Data[0].Archetype + $"{Environment.NewLine} Type: " + card.Data[0].Type + $"{Environment.NewLine} ATK: " + card.Data[0].Atk + $"{Environment.NewLine} Description: " + card.Data[0].Desc);
+                await message.Channel.SendMessageAsync($@"{message.Author.Mention} the information for " + cardName + " is: " + $"{Environment.NewLine} ID: " + card.CardData[0].Id + $"{Environment.NewLine} Name: " + card.CardData[0].Name + $"{Environment.NewLine} Archetype: " + card.CardData[0].Archetype + $"{Environment.NewLine} Type: " + card.CardData[0].Type + $"{Environment.NewLine} ATK: " + card.CardData[0].Atk + $"{Environment.NewLine} Description: " + card.CardData[0].Desc);
             }
             else
             {
-                await message.Channel.SendMessageAsync($@"{message.Author.Mention} the information for " + cardName + $" is: {Environment.NewLine}" + " ID: " + card.Data[0].Id + $"{Environment.NewLine} Name: " + card.Data[0].Name + $"{Environment.NewLine} Archetype: " + card.Data[0].Archetype + $"{Environment.NewLine} Type: " + card.Data[0].Type + $"{Environment.NewLine} Level: " + card.Data[0].Level + $"{Environment.NewLine} ATK: " + card.Data[0].Atk + $"{Environment.NewLine} DEF: " + card.Data[0].Def + $"{Environment.NewLine} Description: " + card.Data[0].Desc);
+                await message.Channel.SendMessageAsync($@"{message.Author.Mention} the information for " + cardName + $" is: {Environment.NewLine}" + " ID: " + card.CardData[0].Id + $"{Environment.NewLine} Name: " + card.CardData[0].Name + $"{Environment.NewLine} Archetype: " + card.CardData[0].Archetype + $"{Environment.NewLine} Type: " + card.CardData[0].Type + $"{Environment.NewLine} Level: " + card.CardData[0].Level + $"{Environment.NewLine} ATK: " + card.CardData[0].Atk + $"{Environment.NewLine} DEF: " + card.CardData[0].Def + $"{Environment.NewLine} Description: " + card.CardData[0].Desc);
             }
         }
 
